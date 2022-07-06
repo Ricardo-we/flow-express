@@ -54,27 +54,27 @@ class BaseRouter {
 	) {
 		this.router.get(
 			`${routeName}`,
-			middlewares["get"] || this.defaultMiddleWare,
+			middlewares?.get || this.defaultMiddleWare,
 			controller?.get || this.undefinedRouteMethod,
 		);
 		this.router.get(
 			`${routeName}/${getOneParams || params}`,
-			middlewares["getOne"] || this.defaultMiddleWare,
+			middlewares?.getOne || this.defaultMiddleWare,
 			controller?.getOne || this.undefinedRouteMethod,
 		);
 		this.router.post(
 			`${routeName}`,
-			middlewares["post"] || this.defaultMiddleWare,
+			middlewares?.post || this.defaultMiddleWare,
 			controller?.post || this.undefinedRouteMethod,
 		);
 		this.router.put(
 			`${routeName}/${putParams || params}`,
-			middlewares["put"] || this.defaultMiddleWare,
+			middlewares?.put || this.defaultMiddleWare,
 			controller?.put || this.undefinedRouteMethod,
 		);
 		this.router.delete(
 			`${routeName}/${deleteParams || params}`,
-			middlewares["delete"] || this.defaultMiddleWare,
+			middlewares?.delete || this.defaultMiddleWare,
 			controller?.delete_ || this.undefinedRouteMethod,
 		);
 		// GET ALL ROUTES
