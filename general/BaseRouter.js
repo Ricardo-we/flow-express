@@ -7,6 +7,7 @@ class BaseRouter {
 		routeName = "",
 		params = ":id",
 		controller = new BaseController(),
+		middleware,
 		allRoutesColors = {
 			GET: "rgba(0, 255, 168, 0.8)",
 			POST: "rgba(0, 194, 255, 0.8)",
@@ -19,45 +20,61 @@ class BaseRouter {
 		this.params = params;
 		this.controller = controller;
 		this.colors = allRoutesColors;
-		this.createRoutes(this.controller);
+		this.createRoutes(this.controller, middleware);
 	}
 
 	undefinedRouteMethod(req, res) {
 		return res.send("<h2>Invalid method</h2>");
 	}
 
-	createRoutes(controller, putParams, deleteParams, getOneParams) {
+	createRoutes(
+		controller,
+		middleware,
+		putParams,
+		deleteParams,
+		getOneParams,
+	) {
 		return this.registerRoute(controller, this.routeName, {
 			params: this.params,
+			middlewares: middleware,
 			putParams,
 			deleteParams,
 			getOneParams,
 		});
 	}
 
+	defaultMiddleWare(req, res, next) {
+		return next();
+	}
+
 	registerRoute(
 		controller,
 		routeName,
-		{ params, getOneParams, putParams, deleteParams },
+		{ params, middlewares, getOneParams, putParams, deleteParams },
 	) {
 		this.router.get(
 			`${routeName}`,
+			middlewares["get"] || this.defaultMiddleWare,
 			controller?.get || this.undefinedRouteMethod,
 		);
 		this.router.get(
 			`${routeName}/${getOneParams || params}`,
+			middlewares["getOne"] || this.defaultMiddleWare,
 			controller?.getOne || this.undefinedRouteMethod,
 		);
 		this.router.post(
 			`${routeName}`,
+			middlewares["post"] || this.defaultMiddleWare,
 			controller?.post || this.undefinedRouteMethod,
 		);
 		this.router.put(
 			`${routeName}/${putParams || params}`,
+			middlewares["put"] || this.defaultMiddleWare,
 			controller?.put || this.undefinedRouteMethod,
 		);
 		this.router.delete(
 			`${routeName}/${deleteParams || params}`,
+			middlewares["delete"] || this.defaultMiddleWare,
 			controller?.delete_ || this.undefinedRouteMethod,
 		);
 		// GET ALL ROUTES
