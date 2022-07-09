@@ -13,9 +13,16 @@ class Admin {
 		});
 	}
 
-	async registerModel(model_name) {
-		const registeredModel = await this.AdminModel.create({ model_name });
-		return registeredModel;
+	async registerModels(modelNamesList = []) {
+		const models = modelNamesList.map((model) => ({ model_name: model }));
+		const modelsResult = [];
+		for (const modelFilterParams of models) {
+			const registered = await AdminRegisteredModels.findOrCreate({
+				where: modelFilterParams,
+			});
+			modelsResult.push(registered);
+		}
+		return modelsResult;
 	}
 
 	async getModelData(model_name) {
