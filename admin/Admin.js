@@ -2,7 +2,7 @@ const { IDField } = require("../db/base-fields");
 const { DataTypes } = require("sequelize");
 
 class Admin {
-	constructor(connection) {
+	constructor(connection, modelList) {
 		this.connection = connection;
 		this.AdminModel = this.connection.define("admin_tables", {
 			id: IDField,
@@ -11,10 +11,11 @@ class Admin {
 				unique: true,
 			},
 		});
+		this.modelList = modelList;
 	}
 
-	async registerModels(modelNamesList = []) {
-		const models = modelNamesList.map((model) => ({ model_name: model }));
+	async registerModels() {
+		const models = this.modelList.map((model) => ({ model_name: model }));
 		const modelsResult = [];
 		for (const modelFilterParams of models) {
 			const registered = await AdminRegisteredModels.findOrCreate({
@@ -35,7 +36,7 @@ class Admin {
 	async insertIntoModel(model_name, values = []) {
 		const model_ = await this.AdminModel.findOne({ where: { model_name } });
 		return await this.connection.query(
-			`INSERT INTO ${model_.model_name} VALUES ${values.join(",")}`,
+			`INSERT INTO ${model_.model_name} VALUES (${values.join(",")})`,
 		);
 	}
 
@@ -65,4 +66,4 @@ class Admin {
 	}
 }
 
-module.exports = {};
+module.exports = Admin;
