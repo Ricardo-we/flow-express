@@ -50,7 +50,14 @@ class BaseRouter {
 	registerRoute(
 		controller,
 		routeName,
-		{ params, middlewares, getOneParams, putParams, deleteParams },
+		{
+			params,
+			routeFieldsTemplate,
+			middlewares,
+			getOneParams,
+			putParams,
+			deleteParams,
+		},
 	) {
 		this.router.get(
 			`${routeName}`,
@@ -79,11 +86,11 @@ class BaseRouter {
 		);
 		// GET ALL ROUTES
 		this.router.get(`${routeName}/routes/all`, (req, res) =>
-			res.send(this.getRoutes(routeName)),
+			res.send(this.getRoutes(routeName, routeFieldsTemplate)),
 		);
 	}
 
-	getRoutes(routeName) {
+	getRoutes(routeName, routeFieldsTemplate) {
 		let result = ``;
 		for (const route of this.router.stack) {
 			const method = Object.keys(route.route.methods)[0].toUpperCase();
@@ -97,6 +104,18 @@ class BaseRouter {
 		return `
 			<div style="background-color: #fff; width: 100%; height: auto">
 				${result} 
+				<h3 style="font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; color: #FF5733;">
+					Route fields
+				</h3>
+				<pre
+					style="font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; color: #000;border-bottom: 1px solid black;"
+				>
+${JSON.stringify(
+	routeFieldsTemplate || { fields: "Fields aren´t registered" },
+	null,
+	"\t",
+)}
+				</pre>
 			</div>
 		`;
 	}
