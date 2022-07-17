@@ -8,6 +8,7 @@ class BaseRouter {
 		params = ":id",
 		controller = new BaseController(),
 		middleware,
+		routeFieldsTemplate,
 		allRoutesColors = {
 			GET: "rgba(0, 255, 168, 0.8)",
 			POST: "rgba(0, 194, 255, 0.8)",
@@ -20,7 +21,7 @@ class BaseRouter {
 		this.params = params;
 		this.controller = controller;
 		this.colors = allRoutesColors;
-		this.createRoutes(this.controller, middleware);
+		this.createRoutes(this.controller, middleware, routeFieldsTemplate);
 	}
 
 	undefinedRouteMethod(req, res) {
@@ -30,6 +31,7 @@ class BaseRouter {
 	createRoutes(
 		controller,
 		middleware,
+		routeFieldsTemplate,
 		putParams,
 		deleteParams,
 		getOneParams,
@@ -37,6 +39,7 @@ class BaseRouter {
 		return this.registerRoute(controller, this.routeName, {
 			params: this.params,
 			middlewares: middleware,
+			routeFieldsTemplate,
 			putParams,
 			deleteParams,
 			getOneParams,
