@@ -3,7 +3,7 @@ const getAppsModels = (registeredApps, initialPath = "./src/apps/") => {
 	for (const app of registeredApps) {
 		const appName = typeof app === "object" ? app?.name : app;
 		const model = Object.values(
-			require(`${initialPath}${appName}/models.js`),
+			require(`../../../${initialPath}${appName}/models.js`),
 		);
 		for (const singleModel of model) {
 			models.push(singleModel);
