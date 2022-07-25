@@ -1,6 +1,6 @@
 const { DataTypes } = require("sequelize");
-const { IDField } = require("flow-express/db/base-fields");
-const { sequelize } = require("../../config/db.config");
+const { IDField } = require("../db/base-fields");
+const { sequelize } = require("../../../src/config/db.config");
 const bcrypt = require("bcrypt");
 
 const AdminRegisteredModels = sequelize.define("admin", {

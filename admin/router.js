@@ -1,7 +1,7 @@
 const AdminController = require("./controllers/admin.controller");
 const AdminUserController = require("./controllers/admin-users.controller");
 
-const BaseRouter = require("flow-express/general/BaseRouter.js");
+const BaseRouter = require("../general/BaseRouter.js");
 const { verifyUserIsAdmin } = require("../utils/jwt.utils");
 
 async function adminAuthMiddleware(req, res, next) {

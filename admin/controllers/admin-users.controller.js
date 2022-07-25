@@ -1,5 +1,5 @@
-const { BaseController } = require("flow-express/general/BaseController");
-const { errorResponse } = require("flow-express/general/base.response");
+const { BaseController } = require("../../general/BaseController");
+const { errorResponse } = require("../../general/base.response");
 const { AdminUser } = require("../models");
 const admin = require("../admin");
 const bcrypt = require("bcrypt");
