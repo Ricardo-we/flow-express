@@ -34,6 +34,10 @@ const AdminUser = sequelize.define(
 				user.password = bcrypt.hashSync(user.password, 10);
 				return user;
 			},
+			beforeUpdate(user) {
+				user.password = bcrypt.hashSync(user.password, 10);
+				return user;
+			},
 		},
 	},
 );

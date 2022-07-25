@@ -1,8 +1,8 @@
 const { BaseController } = require("../../general/BaseController");
 const { errorResponse } = require("../../general/base.response");
 const { AdminUser } = require("../models");
-const admin = require("../admin");
 const bcrypt = require("bcrypt");
+const { createToken } = require("../../utils/jwt.utils");
 
 const successMessage = { message: "success" };
 class AdminUsersController extends BaseController {
@@ -14,7 +14,7 @@ class AdminUsersController extends BaseController {
 		try {
 			const { model_name } = req.query;
 
-			res.json(newInsert);
+			res.json(successMessage);
 		} catch (error) {
 			console.error(error);
 			errorResponse(error, res);
@@ -51,16 +51,7 @@ class AdminUsersController extends BaseController {
 
 	async getOne(req, res) {
 		try {
-			const { model_name } = req.params;
-			const model = await AdminRegisteredModels.findOne({
-				where: { model_name },
-			});
-
-			const modelRecords = await admin.models[
-				model?.model_name
-			]?.findAll();
-
-			res.json(modelRecords);
+			return res.json(successMessage);
 		} catch (error) {
 			errorResponse(error, res);
 		}
@@ -68,19 +59,7 @@ class AdminUsersController extends BaseController {
 
 	async put(req, res) {
 		try {
-			const { model_name } = req.params;
-			const { id } = req.query;
-
-			const model = await AdminRegisteredModels.findOne({
-				where: { model_name },
-			});
-
-			const updatedData = await admin.models[model.model_name].update(
-				req.body,
-				{ where: { id } },
-			);
-
-			return res.json(updatedData);
+			return res.json(successMessage);
 		} catch (error) {
 			errorResponse(error, res);
 		}
@@ -89,23 +68,8 @@ class AdminUsersController extends BaseController {
 	async delete_(req, res) {
 		try {
 			const { id } = req.query;
-			const model = AdminRegisteredModels.findOne({
-				where: { model_name: req.params.model_name },
-			});
-			if (!model) throw new Error("Model not registered");
-			await admin.models[model.model_name].destroy({ where: { id } });
 
 			res.json(successMessage);
-		} catch (error) {
-			errorResponse(error, res);
-		}
-	}
-
-	async deleteRegisteredModel(req, res) {
-		try {
-			const { id } = req.params;
-			await AdminRegisteredModels.destroy({ where: { id } });
-			return successMessage;
 		} catch (error) {
 			errorResponse(error, res);
 		}
