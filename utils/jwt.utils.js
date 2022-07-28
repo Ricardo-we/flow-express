@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const { AdminUser } = require("../admin/models");
 require("dotenv").config();
 
 const defaultApiKey =
@@ -6,7 +7,7 @@ const defaultApiKey =
 
 const createToken = (payload) => {
 	const token = jwt.sign(
-		{ name: payload },
+		payload,
 		process.env.API_SECRET_KEY || defaultApiKey,
 	);
 	return token;
@@ -24,6 +25,17 @@ const verifyToken = (req) => {
 	return { decodedToken, token };
 };
 
-const verifyUserIsAdmin = async (req) => verifyToken(req).decodedToken;
+const verifyUserIsAdmin = async (req) => {
+	const { decodedToken } = verifyToken(req);
+
+	const adminUser = await AdminUser.findOne({
+		where: { username: decodedToken.username },
+	});
+
+	if (adminUser.password !== decodedToken.password)
+		throw new Error("Invalid credentials");
+
+	return decodedToken;
+};
 
 module.exports = { verifyUserIsAdmin, verifyToken, createToken };
